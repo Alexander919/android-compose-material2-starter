@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">IntroToCompose</string>
+    <string name="celsius">Celsius</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="convert">Convert</string>
+    <string name="placeholder">Enter temperature</string>
 </resources>
