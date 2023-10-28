@@ -1,6 +1,7 @@
 package com.hfad.introtocompose.screens.details
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,8 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -24,10 +30,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import com.hfad.introtocompose.model.Movie
+import com.hfad.introtocompose.model.getMovies
+import com.hfad.introtocompose.widgets.MovieRow
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun DetailsScreen(navController: NavController, movie: String) {
+fun DetailsScreen(navController: NavController, movieId: String) {
+    val moviesList = getMovies()
+    var movie = moviesList.find {
+        it.id == movieId
+    }
+    if (movie == null) {
+        movie = moviesList[0]
+    }
     Scaffold(topBar = {
         TopAppBar(backgroundColor = Color.LightGray, elevation = 5.dp) {
             Row {
@@ -39,12 +56,29 @@ fun DetailsScreen(navController: NavController, movie: String) {
             }
         }
     }) {
-        Surface(modifier = Modifier.fillMaxSize()) {
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
-                Text(text = "Details Screen $movie", style = MaterialTheme.typography.h5)
+//                MovieRow(movie)
+                Spacer(modifier = Modifier.height(8.dp))
+                Divider()
+                Text(text = "${movie.title} gallery")
+                LazyRow() {
+                    items(movie.images) {
+                        Card(
+                            modifier = Modifier
+                                .padding(12.dp)
+                                .size(240.dp),
+                            elevation = 4.dp
+                        ) {
+                            Image(painter = rememberImagePainter(data = it), contentDescription = "movies poster")
+                        }
+                    }
+                }
             }
         }
 
