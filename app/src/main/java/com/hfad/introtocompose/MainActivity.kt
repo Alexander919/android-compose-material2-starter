@@ -8,8 +8,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hfad.introtocompose.data.NoteData
+import com.hfad.introtocompose.model.Note
+import com.hfad.introtocompose.screen.NoteScreen
+import com.hfad.introtocompose.screen.NoteViewModel
 import com.hfad.introtocompose.ui.theme.Material2ThemeStarter
 
 class MainActivity : ComponentActivity() {
@@ -31,13 +38,27 @@ fun MyApp(content: @Composable () -> Unit) {
 }
 
 @Composable
+fun NotesApp(noteViewModel: NoteViewModel = viewModel()) {
+    val notesList = noteViewModel.getAllNotes()
+//    val notesList = remember {
+//        mutableStateListOf<Note>()
+//    }
+
+    NoteScreen(notes = notesList, onAddNote = {
+        noteViewModel.addNote(it)
+//        notesList.add(it)
+    }, onRemoveNote = {
+        noteViewModel.removeNote(it)
+//        notesList.remove(it)
+    })
+}
+
+@Composable
 fun MainContent() {
     Surface(
         color = MaterialTheme.colors.background
     ) {
-        Text(
-            text = "Hello world"
-        )
+        NotesApp()
     }
 }
 
