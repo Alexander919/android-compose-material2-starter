@@ -35,7 +35,10 @@ import com.hfad.introtocompose.components.NoteButton
 import com.hfad.introtocompose.components.NoteInputText
 import com.hfad.introtocompose.data.NoteData
 import com.hfad.introtocompose.model.Note
+import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun NoteScreen(
@@ -124,9 +127,16 @@ fun NoteRow(
         ) {
             Text(text = note.title, style = MaterialTheme.typography.subtitle2)
             Text(text = note.description, style = MaterialTheme.typography.subtitle1)
-            Text(text = note.entryDate.format(DateTimeFormatter.ofPattern("EEE d MMM")), style = MaterialTheme.typography.caption)
+            Text(text = formatDate(note.entryDate.time), style = MaterialTheme.typography.caption)
         }
     }
+}
+
+fun formatDate(time: Long): String {
+    val date = Date(time)
+    val format = SimpleDateFormat("EEE, d MMM hh:mm aaa", Locale.getDefault())
+
+    return format.format(date)
 }
 
 @Preview(showBackground = true)
